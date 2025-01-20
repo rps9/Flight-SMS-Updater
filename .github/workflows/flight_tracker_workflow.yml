@@ -28,4 +28,4 @@ jobs:
         EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
         RECIPIENT_EMAILS: ${{ secrets.RECIPIENT_EMAILS }}  
         FLIGHT_LINK: ${{ secrets.FLIGHT_LINK }} 
-      run: python -u function.py
+      run: python -u main_function.py
