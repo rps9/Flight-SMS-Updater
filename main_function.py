@@ -41,6 +41,8 @@ def get_flight_info(flight_link, target_price):
 
     driver.get(flight_link)
 
+    time.sleep(10)
+    
     trend_element = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.XPATH, "//div[contains(text(), 'Prices are currently')]"))
     )
