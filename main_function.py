@@ -43,6 +43,26 @@ def get_flight_info(flight_link, target_price):
 
     time.sleep(10)
     
+    where_from_element = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.XPATH, "//input[contains(@aria-label, 'Where from?')]"))
+    )
+    where_from = where_from_element.get_attribute("value").strip()
+
+    where_to_element = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.XPATH, "//input[contains(@aria-label, 'Where to?')]"))
+    )
+    where_to = where_to_element.get_attribute("value").strip()
+
+    departure_date_element = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.XPATH, "//input[@aria-label='Departure']"))
+    )
+    departure_date = departure_date_element.get_attribute("value").strip()
+
+    return_date_element = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.XPATH, "//input[@aria-label='Return']"))
+    )
+    return_date = return_date_element.get_attribute("value").strip()
+
     trend_element = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.XPATH, "//div[contains(text(), 'Prices are currently')]"))
     )
@@ -55,12 +75,12 @@ def get_flight_info(flight_link, target_price):
 
     # Extract the price text
     cheapest_price = int(cheapest_price_element.text.strip().replace("$", "").replace(",", "")) # Extract and convert to an int
-    price_trend_text = trend_element.text.replace(" —", ";")
+    price_trend_text = trend_element.text.replace(" —", ";").strip()
     
     driver.quit()
 
     #conver cheapest price to int
-    flight_info = f"The current cheapest flight is ${cheapest_price}.\n\n{price_trend_text}."
+    flight_info = f"The current cheapest flight from {where_from} to {where_to} is ${cheapest_price}.\nDate: {departure_date} -> {return_date}.\n\n{price_trend_text}."
     if cheapest_price < target_price:
         flight_info = f"BUY NOW! Flights are currently under your target price (${target_price})\n\n{flight_link}\n\n" + flight_info
     
