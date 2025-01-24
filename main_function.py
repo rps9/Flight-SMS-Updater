@@ -79,10 +79,9 @@ def get_flight_info(flight_link, target_price):
     
     driver.quit()
 
-    #conver cheapest price to int
-    flight_info = f"The current cheapest flight from {where_from} to {where_to} is ${cheapest_price}.\nDate: {departure_date} -> {return_date}.\n\n{price_trend_text}."
+    flight_info = f"The current cheapest flight from {where_from} to {where_to} is ${cheapest_price}.\nDate: {departure_date} -> {return_date}.\n\n{price_trend_text}.\n{flight_link}"
     if cheapest_price < target_price:
-        flight_info = f"BUY NOW! Flights are currently under your target price (${target_price})\n\n{flight_link}\n\n" + flight_info
+        flight_info = f"BUY NOW! Flights are currently under your target price (${target_price})\n\n" + flight_info
     
     return flight_info
 
