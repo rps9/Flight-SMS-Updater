@@ -18,28 +18,14 @@ jobs:
       with:
         python-version: "3.9"
 
-    - name: Install Google Chrome
+    - name: Install dependencies
       run: |
-        wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-        sudo apt install -y ./google-chrome-stable_current_amd64.deb
-        google-chrome --version
+        pip install -r requirements.txt
 
-    - name: Install ChromeDriver
-      run: |
-        CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+' | head -1)
-        DRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
-        wget "https://chromedriver.storage.googleapis.com/${DRIVER_VERSION}/chromedriver_linux64.zip"
-        unzip chromedriver_linux64.zip
-        sudo mv chromedriver /usr/local/bin/
-        chromedriver --version
-
-    - name: Install Python dependencies
-      run: pip install -r requirements.txt
-
-    - name: Run the flight script
+    - name: Run the Python script
       env:
         SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
         EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
-        RECIPIENT_EMAILS: ${{ secrets.RECIPIENT_EMAILS }}
-        FLIGHT_LINK: ${{ secrets.FLIGHT_LINK }}
+        RECIPIENT_EMAILS: ${{ secrets.RECIPIENT_EMAILS }}  
+        FLIGHT_LINK: ${{ secrets.FLIGHT_LINK }} 
       run: python -u main_function.py
