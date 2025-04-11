@@ -30,9 +30,10 @@ def send_message(message, sender_email, sender_password, recipient_emails):
 
 def get_driver():
     options = Options()
-    options.add_argument("--headless")
+    options.add_argument("--headless")  # Run Chrome in headless mode
+    options.add_argument("--start-maximized")  # Attempt to maximize window
+    options.add_argument("--window-size=1920,1080")  # Force window size (required for headless)
     driver = webdriver.Chrome(service=ChromeService(), options=options)
-    driver.set_window_size(1920, 1080)
     return driver
 
 
@@ -41,7 +42,7 @@ def get_flight_info(flight_link, target_price):
 
     driver.get(flight_link)
 
-    time.sleep(60)
+    time.sleep(30)
     
     where_from_element = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.XPATH, "//input[contains(@aria-label, 'Where from?')]"))
@@ -63,9 +64,9 @@ def get_flight_info(flight_link, target_price):
     )
     return_date = return_date_element.get_attribute("value").strip()
 
-    # trend_element = WebDriverWait(driver, 20).until(
-    #     EC.presence_of_element_located((By.XPATH, "//div[contains(text(), 'Prices are currently')]"))
-    # )
+    trend_element = WebDriverWait(driver, 20).until(
+        EC.presence_of_element_located((By.XPATH, "//div[contains(text(), 'Prices are currently')]"))
+    )
     cheapest_section = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.XPATH, "//div[contains(text(), 'Cheapest')]"))
     )
@@ -75,11 +76,11 @@ def get_flight_info(flight_link, target_price):
 
     # Extract the price text
     cheapest_price = int(cheapest_price_element.text.strip().replace("$", "").replace(",", "")) # Extract and convert to an int
-    #price_trend_text = trend_element.text.replace(" —", ";").strip()
+    price_trend_text = trend_element.text.replace(" —", ";").strip()
     
     driver.quit()
 
-    flight_info = f"The current cheapest flight from {where_from} to {where_to} is ${cheapest_price}.\nDate: {departure_date} -> {return_date}.\n\n{flight_link}"
+    flight_info = f"The current cheapest flight from {where_from} to {where_to} is ${cheapest_price}.\nDate: {departure_date} -> {return_date}.\n\n{price_trend_text}.\n{flight_link}"
     if cheapest_price < target_price:
         flight_info = f"BUY NOW! Flights are currently under your target price (${target_price})\n\n" + flight_info
     
@@ -95,7 +96,7 @@ def main():
     recipient_emails = os.getenv('RECIPIENT_EMAILS')
     flight_link = os.getenv('FLIGHT_LINK')
     
-    target_price = 150
+    target_price = 1200
     message = get_flight_info(flight_link, target_price)
     print(message)
 
