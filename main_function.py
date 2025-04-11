@@ -63,7 +63,7 @@ def get_flight_info(flight_link, target_price):
     )
     return_date = return_date_element.get_attribute("value").strip()
 
-    trend_element = WebDriverWait(driver, 10).until(
+    trend_element = WebDriverWait(driver, 20).until(
         EC.presence_of_element_located((By.XPATH, "//div[contains(text(), 'Prices are currently')]"))
     )
     cheapest_section = WebDriverWait(driver, 10).until(
