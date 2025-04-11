@@ -88,7 +88,7 @@ def get_flight_info(flight_link, target_price):
 
     
 def main():
-    #load_dotenv() # UNCOMMENT FOR TESTING
+    load_dotenv() # UNCOMMENT FOR TESTING
 
     sender_email = os.getenv('SENDER_EMAIL')
     sender_password = os.getenv('EMAIL_PASSWORD')
