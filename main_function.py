@@ -96,7 +96,7 @@ def main():
     recipient_emails = os.getenv('RECIPIENT_EMAILS')
     flight_link = os.getenv('FLIGHT_LINK')
     
-    target_price = 1200
+    target_price = 700
     message = get_flight_info(flight_link, target_price)
     print(message)
 
